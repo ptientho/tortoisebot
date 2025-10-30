@@ -54,10 +54,10 @@ def generate_launch_description():
         name ='differential_drive_publisher',
     )
   camera_node = Node(
-      package='raspicam2',
+      package='v4l2_camera',
       condition=IfCondition(PythonExpression(['not ', use_sim_time])),
-      executable='raspicam2_node',
-      name ='pi_camera',
+      executable='v4l2_camera_node',
+      name ='camera_publisher',
     )
   robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -81,7 +81,7 @@ def generate_launch_description():
 
     launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
                                             description='Absolute path to rviz config file'),
-    rviz_node,
+    # rviz_node,
     state_publisher_launch_cmd,
     robot_state_publisher_node,
     joint_state_publisher_node,

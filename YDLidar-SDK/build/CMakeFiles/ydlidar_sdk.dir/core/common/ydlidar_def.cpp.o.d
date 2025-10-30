@@ -1,7 +1,7 @@
 CMakeFiles/ydlidar_sdk.dir/core/common/ydlidar_def.cpp.o: \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/core/common/ydlidar_def.cpp \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/core/common/ydlidar_def.cpp \
  /usr/include/stdc-predef.h \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/./core/common/ydlidar_def.h \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/./core/common/ydlidar_def.h \
  /usr/lib/gcc/aarch64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/aarch64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -51,6 +51,6 @@ CMakeFiles/ydlidar_sdk.dir/core/common/ydlidar_def.cpp.o: \
  /usr/include/aarch64-linux-gnu/bits/struct_rwlock.h \
  /usr/include/alloca.h /usr/include/aarch64-linux-gnu/bits/stdlib-float.h \
  /usr/include/c++/11/bits/std_abs.h \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/./core/base/typedef.h \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/./core/base/utils.h \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/./core/base/typedef.h \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/./core/base/utils.h \
  /usr/include/string.h /usr/include/strings.h

@@ -1,7 +1,7 @@
 CMakeFiles/ydlidar_sdk.dir/core/serial/impl/unix/lock.c.o: \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/core/serial/impl/unix/lock.c \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/core/serial/impl/unix/lock.c \
  /usr/include/stdc-predef.h \
- /home/tortoisebot/humble_ws/src/tortoisebot/YDLidar-SDK/core/serial/impl/unix/lock.h \
+ /home/tortoisebot/ros_dep_ws/src/tortoisebot/YDLidar-SDK/core/serial/impl/unix/lock.h \
  /usr/include/linux/types.h /usr/include/aarch64-linux-gnu/asm/types.h \
  /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \
  /usr/include/aarch64-linux-gnu/asm/bitsperlong.h \
