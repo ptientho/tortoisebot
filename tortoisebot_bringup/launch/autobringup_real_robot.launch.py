@@ -14,14 +14,14 @@ def generate_launch_description():
   pkg_share = launch_ros.substitutions.FindPackageShare(package='tortoisebot_description').find('tortoisebot_description')
   navigation_dir = os.path.join(get_package_share_directory('tortoisebot_navigation'), 'launch')
   rviz_launch_dir=os.path.join(get_package_share_directory('tortoisebot_description'), 'launch')
-  gazebo_launch_dir=os.path.join(get_package_share_directory('tortoisebot_gazebo'), 'launch')
+  ydlidar_launch_dir=os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch')
   cartographer_launch_dir=os.path.join(get_package_share_directory('tortoisebot_slam'), 'launch')
   prefix_address = get_package_share_directory('tortoisebot_navigation') 
   default_model_path = os.path.join(pkg_share, 'models/urdf/tortoisebot_simple.xacro')
-  default_rviz_config_path = os.path.join(get_package_share_directory('tortoisebot_description'), 'rviz/tortoisebot_nav.rviz')
+  default_rviz_config_path = os.path.join(get_package_share_directory('tortoisebot_description'), 'rviz/tortoisebot_sensor_display.rviz')
     
   
-  params_file_sim = os.path.join(prefix_address, 'config', 'nav2_params_simulation.yaml')
+  params_file_robot = os.path.join(prefix_address, 'config', 'nav2_params_robot.yaml')
   
   map_file=LaunchConfiguration('map')
   map_directory = os.path.join(get_package_share_directory(
@@ -29,38 +29,42 @@ def generate_launch_description():
   use_sim_time=LaunchConfiguration('use_sim_time')
   exploration=LaunchConfiguration('exploration')   
   
-  rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', LaunchConfiguration('rvizconfig')],
-        parameters= [{'use_sim_time': use_sim_time}],
-
-    )
-
+  
   state_publisher_launch_cmd=IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(rviz_launch_dir, 'state_publisher.launch.py')),
             launch_arguments={'use_sim_time':use_sim_time}.items())
 
-  gazebo_launch_cmd=IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(gazebo_launch_dir, 'gazebo.launch.py')),
-            condition=IfCondition(use_sim_time),
-            launch_arguments={'use_sim_time':use_sim_time}.items())
-
   navigation_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(navigation_dir, 'navigation.launch.py')),
-        launch_arguments={'params_file': params_file_sim}.items())
+        launch_arguments={'params_file': params_file_robot}.items())
   
   cartographer_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(cartographer_launch_dir, 'cartographer.launch.py')),
-        launch_arguments={'params_file': params_file_sim,
+        launch_arguments={'params_file': params_file_robot,
                           'exploration': exploration,
                           'use_sim_time': use_sim_time}.items())  
+
+  ydlidar_launch_cmd=IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(ydlidar_launch_dir, 'ydlidar_launch.py')),
+            condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+            launch_arguments={'use_sim_time':use_sim_time}.items())
+  
+  differential_drive_node = Node(
+        package='tortoisebot_firmware',
+        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+        executable='differential.py',
+        name ='differential_drive_publisher',
+    )
+  camera_drive_node = Node(
+        package='v4l2_camera',
+        condition=IfCondition(PythonExpression(['not ', use_sim_time])),
+        executable='v4l2_camera_node',
+        name ='camera_publisher',
+    )
   
   robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -106,11 +110,12 @@ def generate_launch_description():
                     {'autostart': True},
                     {'node_names': ['map_server']}]),
 
-    rviz_node,
     state_publisher_launch_cmd,
     robot_state_publisher_node,
     joint_state_publisher_node,
-    gazebo_launch_cmd,
+    ydlidar_launch_cmd,
+    differential_drive_node,
+    camera_drive_node,
     navigation_launch_cmd, 
     cartographer_launch_cmd
 
